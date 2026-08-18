@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-ai-governance-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enterprise-ai-governance-agent
+  template:
+    metadata:
+      labels:
+        app: enterprise-ai-governance-agent
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: agent
+          image: REPLACE_WITH_REGISTRY/enterprise-ai-governance-agent:0.1.0
+          args: ["doctor"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
